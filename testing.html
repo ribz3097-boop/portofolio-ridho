@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ridho // Cyber Security Engineer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;800&family=Space+Grotesk:wght@400;700&display=swap');
+
+        :root {
+            --bg-color: #030305;
+            --primary: #ff003c;
+            --secondary: #00ffcc;
+            --text-main: #f0f0f0;
+            --text-muted: #666;
+            --border-color: #1a1a1a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: crosshair;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.5;
+            overscroll-behavior-x: none; 
+        }
+
+        /* === BACKGROUND GRID EFFECT === */
+        .bg-grid {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(var(--border-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.3;
+            z-index: -1;
+            perspective: 500px;
+        }
+
+        /* === NAVBAR === */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px; /* Padding diperkecil biar agak mepet */
+            background: rgba(3, 3, 5, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--primary);
+            letter-spacing: -1px;
+        }
+
+        .logo span { color: var(--text-main); }
+
+        .nav-links { 
+            display: flex; 
+            gap: 12px; /* Menu dirapetin */
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            transition: 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 2px;
+            background: var(--primary); transition: 0.3s;
+        }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+
+        /* === SECTIONS === */
+        .page-section {
+            display: none;
+            min-height: 100vh;
+            padding: 100px 5% 60px; /* Padding atas disesuaikan */
+            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .page-section.active { display: block; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === HERO === */
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .hero-subtitle::before {
+            content: ''; width: 40px; height: 1px; background: var(--secondary);
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+        @media (min-width: 768px) { .hero-title { font-size: 5rem; } }
+
+        .hero-title span {
+            color: transparent;
+            -webkit-text-stroke: 1.5px var(--primary);
+            display: block;
+        }
+
+        .hero-desc {
+            font-size: 1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 40px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .btn-container { display: flex; gap: 15px; flex-wrap: wrap; }
+
+        .btn {
+            padding: 12px 25px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 800;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+        }
+
+        .btn-main {
+            background: var(--primary);
+            color: #000;
+        }
+        .btn-main:hover {
+            background: transparent;
+            color: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border-color: var(--text-main);
+        }
+        .btn-outline:hover {
+            background: var(--text-main);
+            color: #000;
+        }
+
+        /* === SECTION HEADER === */
+        .sec-header {
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+        }
+
+        .sec-title {
+            font-size: 2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .sec-title span { color: var(--primary); }
+
+        .sec-number {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        /* === CARDS === */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            position: relative;
+            transition: 0.4s;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 0, 60, 0.1);
+        }
+
+        .icon-box {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+
+        .glass-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--text-main);
+        }
+
+        .glass-card p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        /* === SKILLS GRID === */
+        .skills-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .skill-badge {
+            font-family: 'JetBrains Mono', monospace;
+            padding: 8px 15px;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            background: #050505;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .skill-badge::before {
+            content: '▪'; color: var(--primary);
+        }
+
+        .skill-badge:hover {
+            border-color: var(--secondary);
+            color: var(--secondary);
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-grid"></div>
+
+    <nav>
+        <div class="logo">RIDHO<span>_</span>SYS</div>
+        <div class="nav-links">
+            <a onclick="nav('home', this)" class="active">.home()</a>
+            <a onclick="nav('service', this)">.service()</a>
+            <a onclick="nav('project', this)">.project()</a>
+            <a onclick="nav('skill', this)">.skill()</a>
+        </div>
+    </nav>
+
+    <!-- HOME -->
+    <section id="home" class="page-section active">
+        <div class="hero-container">
+            <div class="hero-subtitle">INITIALIZING SYSTEM...</div>
+            <h1 class="hero-title">
+                CYBER<br>
+                <span>SECURITY</span>
+            </h1>
+            <p class="hero-desc">
+                > Halo, saya Ridho. Seorang antusias keamanan siber yang mendalami eksploitasi web, OSINT, dan pembuatan script otomatisasi. Saya membangun pertahanan dengan memahami cara menyerang.
+            </p>
+            <div class="btn-container">
+                <!-- TOMBOL WHATSAPP -->
+                <a href="https://wa.me/6285337377087?text=Halo%20Ridho,%20saya%20tertarik%20dengan%20portofolio%20Anda." target="_blank" class="btn btn-main">Chat WhatsApp</a>
+                <a href="#" class="btn btn-outline">Download Resume</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICE -->
+    <section id="service" class="page-section">
+        <div class="sec-header">
+            <h2 class="sec-title">My <span>Arsenal</span></h2>
+            <span class="sec-number">/ 01</span>
+        </div>
+        <div class="grid-layout">
+            <div class="glass-card">
+                <div class="icon-box">&lt;/&gt;</div>
+                <h3>Web Exploitation</h3>
+                <p>Analisis kerentanan aplikasi web (XSS, SQLi, RCE) dan pengujian penetrasi untuk mengamankan sistem.</p>
+            </div>
+            <div class="glass-card">
+                <div class="icon-box">[+]</div>
+                <h3>OSINT Gathering</h3>
+                <p>Pengumpulan data publik secara mendalam untuk kebutuhan investigasi digital dan profiling.</p>
+            </div>
+            <div class="glass-card">
+                <div class="icon-box">{ }</div>
+                <h3>Script Automation</h3>
+                <p>Pembuatan bot, scraper, dan script efisiensi menggunakan Python, Bash, dan Node.js.</p>
+            </div>
+            <div class="glass-card">
+                <div class="icon-box">#</div>
+                <h3>Server Hardening</h3>
+                <p>Konfigurasi Linux, manajemen jaringan, dan penutupan celah keamanan pada server.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECT -->
+    <section id="project" class="page-section">
+        <div class="sec-header">
+            <h2 class="sec-title">Recent <span>Operations</span></h2>
+            <span class="sec-number">/ 02</span>
+        </div>
+        <div class="grid-layout">
+            <div class="glass-card">
+                <div class="icon-box">PROJ_01</div>
+                <h3>Phishing Detector</h3>
+                <p>Sistem deteksi dini berbasis Python yang memindai URL dan parameter berbahaya sebelum diakses.</p>
+                <br>
+                <a href="#" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.75rem;">View Code</a>
+            </div>
+            <div class="glass-card">
+                <div class="icon-box">PROJ_02</div>
+                <h3>Termux Bot Panel</h3>
+                <p>Bot Telegram interaktif yang berjalan di Termux untuk otomatisasi OSINT dan pelacakan IP.</p>
+                <br>
+                <a href="#" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.75rem;">View Code</a>
+            </div>
+            <div class="glass-card">
+                <div class="icon-box">PROJ_03</div>
+                <h3>Net Scanner</h3>
+                <p>Script untuk memetakan port terbuka dan deteksi perangkat pada jaringan lokal secara cepat.</p>
+                <br>
+                <a href="#" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.75rem;">View Code</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SKILL -->
+    <section id="skill" class="page-section">
+        <div class="sec-header">
+            <h2 class="sec-title">Technical <span>Skills</span></h2>
+            <span class="sec-number">/ 03</span>
+        </div>
+        <div class="skills-wrapper">
+            <div class="skill-badge">Python</div>
+            <div class="skill-badge">Bash / Shell</div>
+            <div class="skill-badge">Linux (Debian/Arch)</div>
+            <div class="skill-badge">Burp Suite</div>
+            <div class="skill-badge">Nmap</div>
+            <div class="skill-badge">Wireshark</div>
+            <div class="skill-badge">Metasploit</div>
+            <div class="skill-badge">HTML / CSS / JS</div>
+            <div class="skill-badge">Networking (TCP/IP)</div>
+            <div class="skill-badge">Cryptography</div>
+            <div class="skill-badge">OSINT Frameworks</div>
+            <div class="skill-badge">Git / GitHub</div>
+        </div>
+    </section>
+
+    <footer>
+        <p>SYSTEM_TERMINATED // RIDHO &copy; 2026</p>
+    </footer>
+
+    <script>
+        // === DAFTAR HALAMAN ===
+        const pagesOrder = ['home', 'service', 'project', 'skill'];
+        let currentPageIndex = 0;
+
+        // === FUNGSI KLIK MENU ===
+        function nav(pageId, element) {
+            let pages = document.querySelectorAll('.page-section');
+            pages.forEach(page => page.classList.remove('active'));
+
+            document.getElementById(pageId).classList.add('active');
+
+            let links = document.querySelectorAll('.nav-links a');
+            links.forEach(link => link.classList.remove('active'));
+            element.classList.add('active');
+            
+            currentPageIndex = pagesOrder.indexOf(pageId);
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // === FITUR SWIPE (GESER) ===
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeThreshold = 50; 
+            const diffX = touchEndX - touchStartX;
+            const diffY = touchEndY - touchStartY;
+
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                if (diffX < -swipeThreshold) {
+                    if (currentPageIndex < pagesOrder.length - 1) {
+                        currentPageIndex++;
+                        updatePageFromSwipe();
+                    }
+                } else if (diffX > swipeThreshold) {
+                    if (currentPageIndex > 0) {
+                        currentPageIndex--;
+                        updatePageFromSwipe();
+                    }
+                }
+            }
+        }
+
+        function updatePageFromSwipe() {
+            let targetPageId = pagesOrder[currentPageIndex];
+            
+            let pages = document.querySelectorAll('.page-section');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            document.getElementById(targetPageId).classList.add('active');
+            
+            let links = document.querySelectorAll('.nav-links a');
+            links.forEach((link, index) => {
+                if(index === currentPageIndex) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
